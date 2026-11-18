@@ -619,7 +619,8 @@ local function LaunchSUSHub(isPremium)
     rtSub.Size = UDim2.new(1, -12, 0, 15)
     rtSub.Position = UDim2.fromOffset(10, 20)
     rtSub.BackgroundTransparency = 1
-    rtSub.Text = isPremium and "IDs reais de alta qualidade liberados!" : "Requer Versão Paga / Key Premium para desbloquear"
+    -- AQUI ESTAVA O ERRO (os dois pontos ':' foram trocados por 'or')
+    rtSub.Text = isPremium and "IDs reais de alta qualidade liberados!" or "Requer Versão Paga / Key Premium para desbloquear"
     rtSub.TextColor3 = COLORS.dim
     rtSub.Font = Enum.Font.Gotham
     rtSub.TextSize = 9
