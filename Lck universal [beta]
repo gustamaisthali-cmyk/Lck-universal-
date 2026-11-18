@@ -1,0 +1,939 @@
+-- =====================================================================
+-- SUS HUB | Eu ❤️ sua mãe v.11.0 — LCK SCRIPT (Mobile Otimizado & Seguro)
+-- =====================================================================
+
+local API_CONFIG = {
+    DISCORD_INVITE = "https://discord.gg/STYVn6SJ5",
+    YOUTUBE_URL = "https://www.youtube.com/@LCK_SCRIPT",
+    INSTAGRAM_URL = "https://www.instagram.com/011.gustavofx?psln=N29ma3NxbGg1NXQ2",
+    KEY_LINKS = {
+        Lootlabs = "https://links.lootlabs.gg/s?wkn6J5Hn",
+        Linkvertise = "https://linkvertise.com/exemplo-link-linkvertise",
+    },
+    VALID_KEY = "FREE-X991-AJ89-WH2L-CK72"
+}
+
+local Players           = game:GetService("Players")
+local HttpService       = game:GetService("HttpService")
+local UserInputService  = game:GetService("UserInputService")
+local StarterGui        = game:GetService("StarterGui")
+local RunService        = game:GetService("RunService")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local LocalPlayer = Players.LocalPlayer
+
+local function Protect(gui)
+    pcall(function()
+        if gethui then
+            gui.Parent = gethui()
+        elseif game:GetService("CoreGui"):FindFirstChild("RobloxGui") then
+            gui.Parent = game:GetService("CoreGui")
+        else
+            gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+        end
+    end)
+end
+
+local function Notify(title, desc, duration)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = title or "SUS HUB v.11.0",
+            Text = desc or "",
+            Duration = duration or 4,
+        })
+    end)
+end
+
+-- =====================================================================
+-- SISTEMAS DE TEXTURAS SEGUROS
+-- =====================================================================
+local faces = {"Front", "Back", "Bottom", "Top", "Right", "Left"}
+
+local function applyTextureToPart(part, textureId)
+    pcall(function()
+        for _, face in ipairs(faces) do
+            local tex = Instance.new("Texture")
+            tex.Texture = textureId
+            tex.Face = Enum.NormalId[face]
+            tex.Color3 = part.Color
+            tex.Transparency = part.Transparency
+            tex.Parent = part
+        end
+    end)
+end
+
+-- Textura Minecraft (Livre no Free)
+local minecraftMaterials = {
+    {"Wood", "rbxassetid://3258599312"},
+    {"WoodPlanks", "rbxassetid://8676581022"},
+    {"Brick", "rbxassetid://8558400252"},
+    {"Cobblestone", "rbxassetid://5003953441"},
+    {"Concrete", "rbxassetid://7341687607"},
+    {"DiamondPlate", "rbxassetid://6849247561"},
+    {"Fabric", "rbxassetid://118776397"},
+    {"Granite", "rbxassetid://4722586771"},
+    {"Grass", "rbxassetid://4722588177"},
+    {"Ice", "rbxassetid://3823766459"},
+    {"Marble", "rbxassetid://62967586"},
+    {"Metal", "rbxassetid://62967586"},
+    {"Sand", "rbxassetid://152572215"}
+}
+
+local function runMinecraftTexturing()
+    pcall(function()
+        for _, part in ipairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") then
+                for _, mat in ipairs(minecraftMaterials) do
+                    if part.Material.Name == mat[1] then
+                        applyTextureToPart(part, mat[2])
+                        part.Material = Enum.Material.SmoothPlastic
+                        break
+                    end
+                end
+            end
+        end
+    end)
+end
+
+-- Texturas Reais Oficiais (Com Cadeado no Free / Liberado no Premium)
+local materialTextures = {
+    {"Grass", "rbxassetid://7547167347"},
+    {"Stone", "rbxassetid://7546651802"},
+    {"Concrete", "rbxassetid://7546653328"},
+    {"Wood", "rbxassetid://7547190453"},
+    {"Sand", "rbxassetid://7547294684"},
+    {"Ice", "rbxassetid://7546644642"},
+    {"Marble", "rbxassetid://7547174345"},
+    {"Metal", "rbxassetid://7547178395"},
+    {"Brick", "rbxassetid://7546648254"},
+    {"Granite", "rbxassetid://7547164400"}
+}
+
+local function runCustomTexturing()
+    pcall(function()
+        for _, part in ipairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") then
+                for _, mat in ipairs(materialTextures) do
+                    applyTextureToPart(part, mat[2])
+                    break
+                end
+            end
+        end
+    end)
+end
+
+local function GetHWID()
+    local hwid = "MOBILE-USER-" .. tostring(LocalPlayer.UserId)
+    pcall(function()
+        if gethwid then hwid = gethwid() end
+    end)
+    return tostring(hwid)
+end
+
+-- =====================================================================
+-- LANÇAMENTO DO HUB PRINCIPAL
+-- =====================================================================
+local function LaunchSUSHub(isPremium)
+    local COLORS = {
+        bg     = Color3.fromRGB(18, 12, 10),
+        panel  = Color3.fromRGB(26, 18, 14),
+        accent = Color3.fromRGB(255, 140, 0),
+        text   = Color3.fromRGB(240, 230, 220),
+        dim    = Color3.fromRGB(150, 130, 120),
+    }
+
+    local gui = Instance.new("ScreenGui")
+    gui.Name, gui.ResetOnSpawn, gui.IgnoreGuiInset = "SUSHub_v11", false, true
+    Protect(gui)
+
+    local main = Instance.new("Frame")
+    main.Size = UDim2.fromOffset(540, 390)
+    main.Position = UDim2.new(0.5, -270, 0.5, -195)
+    main.BackgroundColor3 = COLORS.bg
+    main.BorderSizePixel = 0
+    main.Parent = gui
+    Instance.new("UICorner", main).CornerRadius = UDim.new(0, 10)
+    local mainStroke = Instance.new("UIStroke", main)
+    mainStroke.Color, mainStroke.Thickness, mainStroke.Transparency = COLORS.accent, 1, 0.3
+
+    local titleBar = Instance.new("Frame")
+    titleBar.Size, titleBar.BackgroundColor3 = UDim2.new(1, 0, 0, 42), COLORS.panel
+    titleBar.BorderSizePixel = 0
+    titleBar.Parent = main
+    Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 10)
+
+    local gameName = "Roblox Game"
+    pcall(function()
+        local info = MarketplaceService:GetProductInfo(game.PlaceId)
+        if info and info.Name then gameName = info.Name end
+    end)
+
+    local statusTitleText = isPremium and " • [PAGO / PREMIUM]" or " • [FREE]"
+    local titleLbl = Instance.new("TextLabel")
+    titleLbl.Size = UDim2.new(1, -220, 1, 0)
+    titleLbl.Position = UDim2.fromOffset(12, 0)
+    titleLbl.BackgroundTransparency = 1
+    titleLbl.Text = "SUS HUB Project NEXT\n" .. gameName .. statusTitleText
+    titleLbl.TextXAlignment, titleLbl.TextColor3 = Enum.TextXAlignment.Left, isPremium and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(255, 160, 60)
+    titleLbl.Font, titleLbl.TextSize = Enum.Font.GothamBold, 11
+    titleLbl.Parent = titleBar
+
+    -- BOTÃO DE FECHAR O HUB (X)
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size, closeBtn.Position = UDim2.fromOffset(26, 26), UDim2.new(1, -32, 0.5, -13)
+    closeBtn.BackgroundColor3, closeBtn.Text = Color3.fromRGB(80, 30, 30), "✕"
+    closeBtn.TextColor3, closeBtn.Font, closeBtn.TextSize = Color3.fromRGB(255, 120, 120), Enum.Font.GothamBold, 12
+    closeBtn.Parent = titleBar
+    Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
+
+    -- BOTÃO FLUTUANTE PARA ABRIR O HUB (Na lateral esquerda)
+    local openBtn = Instance.new("TextButton")
+    openBtn.Size = UDim2.fromOffset(110, 34)
+    openBtn.Position = UDim2.new(0, 15, 0.5, -17)
+    openBtn.BackgroundColor3 = COLORS.panel
+    openBtn.Text = "SUS HUB v11"
+    openBtn.TextColor3 = COLORS.accent
+    openBtn.Font, openBtn.TextSize = Enum.Font.GothamBold, 12
+    openBtn.Visible = false
+    openBtn.Parent = gui
+    Instance.new("UICorner", openBtn).CornerRadius = UDim.new(0, 8)
+    local openStroke = Instance.new("UIStroke", openBtn)
+    openStroke.Color = COLORS.accent
+
+    closeBtn.MouseButton1Click:Connect(function()
+        main.Visible = false
+        openBtn.Visible = true
+    end)
+
+    openBtn.MouseButton1Click:Connect(function()
+        main.Visible = true
+        openBtn.Visible = false
+    end)
+
+    -- Sistema de Arrastar (Hub Principal)
+    do
+        local dragging, dragStart, startPos
+        titleBar.InputBegan:Connect(function(i)
+            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                dragging, dragStart, startPos = true, i.Position, main.Position
+            end
+        end)
+        UserInputService.InputEnded:Connect(function(i)
+            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then dragging = false end
+        end)
+        UserInputService.InputChanged:Connect(function(i)
+            if not dragging then return end
+            if i.UserInputType ~= Enum.UserInputType.MouseMovement and i.UserInputType ~= Enum.UserInputType.Touch then return end
+            local d = i.Position - dragStart
+            main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+        end)
+    end
+
+    -- Sistema de Arrastar (Botão Flutuante)
+    do
+        local dragging, dragStart, startPos
+        openBtn.InputBegan:Connect(function(i)
+            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                dragging, dragStart, startPos = true, i.Position, openBtn.Position
+            end
+        end)
+        UserInputService.InputEnded:Connect(function(i)
+            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then dragging = false end
+        end)
+        UserInputService.InputChanged:Connect(function(i)
+            if not dragging then return end
+            if i.UserInputType ~= Enum.UserInputType.MouseMovement and i.UserInputType ~= Enum.UserInputType.Touch then return end
+            local d = i.Position - dragStart
+            openBtn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+        end)
+    end
+
+    -- ABAS DE NAVEGAÇÃO
+    local TabBar = Instance.new("Frame", main)
+    TabBar.Size = UDim2.new(1, -20, 0, 32)
+    TabBar.Position = UDim2.fromOffset(10, 48)
+    TabBar.BackgroundTransparency = 1
+
+    local function makeTabButton(text, xPos, width)
+        local btn = Instance.new("TextButton", TabBar)
+        btn.Size = UDim2.fromOffset(width, 26)
+        btn.Position = UDim2.fromOffset(xPos, 0)
+        btn.BackgroundColor3 = Color3.fromRGB(35, 24, 18)
+        btn.Text = text
+        btn.TextColor3 = COLORS.text
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 11
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+        Instance.new("UIStroke", btn).Color = Color3.fromRGB(80, 50, 35)
+        return btn
+    end
+
+    local MainTabBtn = makeTabButton("⭐ Main", 0, 75)
+    local InfoTabBtn = makeTabButton("📜 Informações", 80, 95)
+    local TexturaTabBtn = makeTabButton("🧱 Texturas", 180, 85)
+
+    local ContentArea = Instance.new("Frame", main)
+    ContentArea.Size = UDim2.new(1, -20, 1, -92)
+    ContentArea.Position = UDim2.fromOffset(10, 82)
+    ContentArea.BackgroundTransparency = 1
+
+    -- PÁGINA 1: MAIN
+    local MainFrame = Instance.new("Frame", ContentArea)
+    MainFrame.Size = UDim2.fromScale(1, 1)
+    MainFrame.BackgroundTransparency = 1
+    MainFrame.Visible = true
+
+    local LeftPanel = Instance.new("Frame", MainFrame)
+    LeftPanel.Size = UDim2.fromOffset(250, 288)
+    LeftPanel.Position = UDim2.fromOffset(0, 0)
+    LeftPanel.BackgroundColor3 = COLORS.panel
+    Instance.new("UICorner", LeftPanel).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", LeftPanel).Color = COLORS.accent
+
+    local UserInfoTitle = Instance.new("TextLabel", LeftPanel)
+    UserInfoTitle.Size = UDim2.new(1, -16, 0, 18)
+    UserInfoTitle.Position = UDim2.fromOffset(10, 8)
+    UserInfoTitle.BackgroundTransparency = 1
+    UserInfoTitle.Text = "USER INFO"
+    UserInfoTitle.TextColor3 = COLORS.accent
+    UserInfoTitle.Font = Enum.Font.GothamBold
+    UserInfoTitle.TextSize = 10
+    UserInfoTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local CustomAvatarImg = Instance.new("ImageLabel", LeftPanel)
+    CustomAvatarImg.Size = UDim2.fromOffset(40, 40)
+    CustomAvatarImg.Position = UDim2.fromOffset(10, 30)
+    CustomAvatarImg.BackgroundColor3 = COLORS.bg
+    CustomAvatarImg.Image = "rbxassetid://7072718330"
+    Instance.new("UICorner", CustomAvatarImg).CornerRadius = UDim.new(1, 0)
+    Instance.new("UIStroke", CustomAvatarImg).Color = COLORS.accent
+
+    local UserDetails = Instance.new("TextLabel", LeftPanel)
+    UserDetails.Size = UDim2.new(1, -60, 0, 40)
+    UserDetails.Position = UDim2.fromOffset(58, 32)
+    UserDetails.BackgroundTransparency = 1
+    UserDetails.Text = LocalPlayer.Name .. "\n@" .. LocalPlayer.Name .. "\nHWID: " .. GetHWID():sub(1, 10) .. "..."
+    UserDetails.TextColor3 = COLORS.text
+    UserDetails.Font = Enum.Font.GothamBold
+    UserDetails.TextSize = 10
+    UserDetails.TextXAlignment = Enum.TextXAlignment.Left
+
+    local DevInfo = Instance.new("TextLabel", LeftPanel)
+    DevInfo.Size = UDim2.new(1, -16, 0, 25)
+    DevInfo.Position = UDim2.fromOffset(10, 75)
+    DevInfo.BackgroundTransparency = 1
+    DevInfo.Text = "SUS HUB Development\nLibrary • LCK Engine"
+    DevInfo.TextColor3 = COLORS.dim
+    DevInfo.Font = Enum.Font.Gotham
+    DevInfo.TextSize = 9
+    DevInfo.TextXAlignment = Enum.TextXAlignment.Left
+
+    local Divider = Instance.new("Frame", LeftPanel)
+    Divider.Size = UDim2.new(1, -20, 0, 1)
+    Divider.Position = UDim2.fromOffset(10, 105)
+    Divider.BackgroundColor3 = Color3.fromRGB(60, 40, 30)
+    Divider.BorderSizePixel = 0
+
+    local TelemetryTitle = Instance.new("TextLabel", LeftPanel)
+    TelemetryTitle.Size = UDim2.new(1, -16, 0, 18)
+    TelemetryTitle.Position = UDim2.fromOffset(10, 112)
+    TelemetryTitle.BackgroundTransparency = 1
+    TelemetryTitle.Text = "SYSTEM TELEMETRY"
+    TelemetryTitle.TextColor3 = COLORS.accent
+    TelemetryTitle.Font = Enum.Font.GothamBold
+    TelemetryTitle.TextSize = 10
+    TelemetryTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local function makeTelemetryBox(name, x, y)
+        local box = Instance.new("Frame", LeftPanel)
+        box.Size = UDim2.fromOffset(110, 38)
+        box.Position = UDim2.fromOffset(x, y)
+        box.BackgroundColor3 = Color3.fromRGB(20, 14, 10)
+        Instance.new("UICorner", box).CornerRadius = UDim.new(0, 6)
+        Instance.new("UIStroke", box).Color = Color3.fromRGB(60, 40, 30)
+
+        local lblName = Instance.new("TextLabel", box)
+        lblName.Size = UDim2.new(1, -8, 0, 14)
+        lblName.Position = UDim2.fromOffset(6, 2)
+        lblName.BackgroundTransparency = 1
+        lblName.Text = name
+        lblName.TextColor3 = COLORS.dim
+        lblName.Font = Enum.Font.Gotham
+        lblName.TextSize = 9
+        lblName.TextXAlignment = Enum.TextXAlignment.Left
+
+        local lblVal = Instance.new("TextLabel", box)
+        lblVal.Size = UDim2.new(1, -8, 0, 18)
+        lblVal.Position = UDim2.fromOffset(6, 18)
+        lblVal.BackgroundTransparency = 1
+        lblVal.Text = "..."
+        lblVal.TextColor3 = COLORS.accent
+        lblVal.Font = Enum.Font.GothamBold
+        lblVal.TextSize = 11
+        lblVal.TextXAlignment = Enum.TextXAlignment.Left
+        return lblVal
+    end
+
+    local FpsVal = makeTelemetryBox("FPS", 10, 135)
+    local PingVal = makeTelemetryBox("NETWORK PING", 130, 135)
+    local UptimeVal = makeTelemetryBox("UPTIME", 10, 180)
+    local PlayersVal = makeTelemetryBox("PLAYERS", 130, 180)
+
+    local startTime = tick()
+    local frameCount, lastTick = 0, tick()
+    RunService.RenderStepped:Connect(function()
+        pcall(function()
+            frameCount = frameCount + 1
+            local now = tick()
+            if now - lastTick >= 1 then
+                local fps = math.floor(frameCount / (now - lastTick))
+                local ping = 0
+                pcall(function() ping = math.floor(LocalPlayer:GetNetworkPing() * 1000) end)
+                
+                local elapsed = math.floor(now - startTime)
+                local hrs = math.floor(elapsed / 3600)
+                local mins = math.floor((elapsed % 3600) / 60)
+                local secs = elapsed % 60
+                
+                FpsVal.Text = fps .. " FPS"
+                PingVal.Text = math.clamp(ping, 1, 999) .. " ms"
+                UptimeVal.Text = string.format("%02d:%02d:%02d", hrs, mins, secs)
+                PlayersVal.Text = #Players:GetPlayers() .. " / " .. Players.MaxPlayers
+                
+                frameCount = 0
+                lastTick = now
+            end
+        end)
+    end)
+
+    local RightPanel = Instance.new("Frame", MainFrame)
+    RightPanel.Size = UDim2.fromOffset(260, 288)
+    RightPanel.Position = UDim2.fromOffset(260, 0)
+    RightPanel.BackgroundColor3 = COLORS.panel
+    Instance.new("UICorner", RightPanel).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", RightPanel).Color = COLORS.accent
+
+    local ShortcutsTitle = Instance.new("TextLabel", RightPanel)
+    ShortcutsTitle.Size = UDim2.new(1, -16, 0, 18)
+    ShortcutsTitle.Position = UDim2.fromOffset(10, 8)
+    ShortcutsTitle.BackgroundTransparency = 1
+    ShortcutsTitle.Text = "PINNED SHORTCUTS"
+    ShortcutsTitle.TextColor3 = COLORS.accent
+    ShortcutsTitle.Font = Enum.Font.GothamBold
+    ShortcutsTitle.TextSize = 10
+    ShortcutsTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local function makeShortcutRow(title, desc, yPos, callback)
+        local btn = Instance.new("TextButton", RightPanel)
+        btn.Size = UDim2.fromOffset(240, 44)
+        btn.Position = UDim2.fromOffset(10, yPos)
+        btn.BackgroundColor3 = Color3.fromRGB(20, 14, 10)
+        btn.Text = ""
+        btn.AutoButtonColor = false
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+        local str = Instance.new("UIStroke", btn)
+        str.Color = Color3.fromRGB(60, 40, 30)
+
+        local tLbl = Instance.new("TextLabel", btn)
+        tLbl.Size = UDim2.new(1, -12, 0, 20)
+        tLbl.Position = UDim2.fromOffset(8, 4)
+        tLbl.BackgroundTransparency = 1
+        tLbl.Text = "★ " .. title
+        tLbl.TextColor3 = COLORS.text
+        tLbl.Font = Enum.Font.GothamBold
+        tLbl.TextSize = 11
+        tLbl.TextXAlignment = Enum.TextXAlignment.Left
+
+        local dLbl = Instance.new("TextLabel", btn)
+        dLbl.Size = UDim2.new(1, -12, 0, 16)
+        dLbl.Position = UDim2.fromOffset(8, 22)
+        dLbl.BackgroundTransparency = 1
+        dLbl.Text = desc
+        dLbl.TextColor3 = COLORS.dim
+        dLbl.Font = Enum.Font.Gotham
+        dLbl.TextSize = 9
+        dLbl.TextXAlignment = Enum.TextXAlignment.Left
+
+        btn.MouseButton1Click:Connect(callback)
+        return btn
+    end
+
+    makeShortcutRow("Discord Community", "Copiar link do Discord do LCK", 34, function()
+        pcall(function() (setclipboard or toclipboard)(API_CONFIG.DISCORD_INVITE) end)
+        Notify("Sucesso", "Link do Discord copiado!", 2)
+    end)
+
+    makeShortcutRow("YouTube Channel", "Copiar canal @LCK_SCRIPT", 86, function()
+        pcall(function() (setclipboard or toclipboard)(API_CONFIG.YOUTUBE_URL) end)
+        Notify("Sucesso", "YouTube copiado!", 2)
+    end)
+
+    makeShortcutRow("Instagram Profile", "Copiar Instagram oficial", 138, function()
+        pcall(function() (setclipboard or toclipboard)(API_CONFIG.INSTAGRAM_URL) end)
+        Notify("Sucesso", "Instagram copiado!", 2)
+    end)
+
+    -- PÁGINA 2: INFORMAÇÕES
+    local InfoFrame = Instance.new("Frame", ContentArea)
+    InfoFrame.Size = UDim2.fromScale(1, 1)
+    InfoFrame.BackgroundTransparency = 1
+    InfoFrame.Visible = false
+
+    local InfoPanel = Instance.new("Frame", InfoFrame)
+    InfoPanel.Size = UDim2.fromOffset(520, 288)
+    InfoPanel.Position = UDim2.fromOffset(0, 0)
+    InfoPanel.BackgroundColor3 = COLORS.panel
+    Instance.new("UICorner", InfoPanel).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", InfoPanel).Color = COLORS.accent
+
+    local InfoHeaderTitle = Instance.new("TextLabel", InfoPanel)
+    InfoHeaderTitle.Size = UDim2.new(1, -16, 0, 22)
+    InfoHeaderTitle.Position = UDim2.fromOffset(12, 12)
+    InfoHeaderTitle.BackgroundTransparency = 1
+    InfoHeaderTitle.Text = "📜 CENTRAL DE INFORMAÇÕES & SCRIPTS EXTRAS"
+    InfoHeaderTitle.TextColor3 = COLORS.accent
+    InfoHeaderTitle.Font = Enum.Font.GothamBold
+    InfoHeaderTitle.TextSize = 11
+    InfoHeaderTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local function makeExtraScriptButton(title, desc, yPos, callback)
+        local btn = Instance.new("TextButton", InfoPanel)
+        btn.Size = UDim2.fromOffset(496, 42)
+        btn.Position = UDim2.fromOffset(12, yPos)
+        btn.BackgroundColor3 = Color3.fromRGB(20, 14, 10)
+        btn.Text = ""
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+        Instance.new("UIStroke", btn).Color = Color3.fromRGB(80, 50, 35)
+
+        local tLbl = Instance.new("TextLabel", btn)
+        tLbl.Size = UDim2.new(1, -12, 0, 20)
+        tLbl.Position = UDim2.fromOffset(10, 4)
+        tLbl.BackgroundTransparency = 1
+        tLbl.Text = "🚀 " .. title
+        tLbl.TextColor3 = COLORS.accent
+        tLbl.Font = Enum.Font.GothamBold
+        tLbl.TextSize = 11
+        tLbl.TextXAlignment = Enum.TextXAlignment.Left
+
+        local dLbl = Instance.new("TextLabel", btn)
+        dLbl.Size = UDim2.new(1, -12, 0, 16)
+        dLbl.Position = UDim2.fromOffset(10, 22)
+        dLbl.BackgroundTransparency = 1
+        dLbl.Text = desc
+        dLbl.TextColor3 = COLORS.dim
+        dLbl.Font = Enum.Font.Gotham
+        dLbl.TextSize = 9
+        dLbl.TextXAlignment = Enum.TextXAlignment.Left
+
+        btn.MouseButton1Click:Connect(callback)
+    end
+
+    makeExtraScriptButton("LCK HUB PIGGY 1.60", "Executar script customizado para Piggy", 45, function()
+        Notify("Carregando...", "Executando LCK HUB PIGGY", 2)
+        pcall(function() loadstring(game:HttpGet("https://pastefy.app/ck27ob4i/raw"))() end)
+    end)
+
+    makeExtraScriptButton("redzlib v5 UI Library", "Carregar a biblioteca de interface redzlib v5", 95, function()
+        Notify("Carregando...", "Executando redzlib v5", 2)
+        pcall(function() loadstring(game:HttpGet("https://pastefy.app/SglyCstp/raw"))() end)
+    end)
+
+    -- PÁGINA 3: ABA DE TEXTURAS (COM CADEADO PARA FREE E LIBERADO NO PREMIUM)
+    local TexturaFrame = Instance.new("Frame", ContentArea)
+    TexturaFrame.Size = UDim2.fromScale(1, 1)
+    TexturaFrame.BackgroundTransparency = 1
+    TexturaFrame.Visible = false
+
+    local TexturaPanel = Instance.new("Frame", TexturaFrame)
+    TexturaPanel.Size = UDim2.fromOffset(520, 288)
+    TexturaPanel.Position = UDim2.fromOffset(0, 0)
+    TexturaPanel.BackgroundColor3 = COLORS.panel
+    Instance.new("UICorner", TexturaPanel).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", TexturaPanel).Color = COLORS.accent
+
+    local TexturaHeaderTitle = Instance.new("TextLabel", TexturaPanel)
+    TexturaHeaderTitle.Size = UDim2.new(1, -16, 0, 22)
+    TexturaHeaderTitle.Position = UDim2.fromOffset(12, 10)
+    TexturaHeaderTitle.BackgroundTransparency = 1
+    TexturaHeaderTitle.Text = "🧱 GERENCIADOR DE TEXTURAS (FREE & PREMIUM)"
+    TexturaHeaderTitle.TextColor3 = COLORS.accent
+    TexturaHeaderTitle.Font = Enum.Font.GothamBold
+    TexturaHeaderTitle.TextSize = 11
+    TexturaHeaderTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- Botão 1: Textura Minecraft (Livre para Free)
+    local MinecraftBtn = Instance.new("TextButton", TexturaPanel)
+    MinecraftBtn.Size = UDim2.fromOffset(496, 40)
+    MinecraftBtn.Position = UDim2.fromOffset(12, 40)
+    MinecraftBtn.BackgroundColor3 = Color3.fromRGB(20, 14, 10)
+    MinecraftBtn.Text = ""
+    Instance.new("UICorner", MinecraftBtn).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", MinecraftBtn).Color = COLORS.accent
+
+    local mcTitle = Instance.new("TextLabel", MinecraftBtn)
+    mcTitle.Size = UDim2.new(1, -12, 0, 18)
+    mcTitle.Position = UDim2.fromOffset(10, 3)
+    mcTitle.BackgroundTransparency = 1
+    mcTitle.Text = "🎨 Textura Minecraft (FREE)"
+    mcTitle.TextColor3 = Color3.fromRGB(0, 255, 100)
+    mcTitle.Font = Enum.Font.GothamBold
+    mcTitle.TextSize = 11
+    mcTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local mcSub = Instance.new("TextLabel", MinecraftBtn)
+    mcSub.Size = UDim2.new(1, -12, 0, 15)
+    mcSub.Position = UDim2.fromOffset(10, 20)
+    mcSub.BackgroundTransparency = 1
+    mcSub.Text = "Disponível para todos os usuários no modo livre"
+    mcSub.TextColor3 = COLORS.dim
+    mcSub.Font = Enum.Font.Gotham
+    mcSub.TextSize = 9
+    mcSub.TextXAlignment = Enum.TextXAlignment.Left
+
+    MinecraftBtn.MouseButton1Click:Connect(function()
+        Notify("Textura Minecraft", "Aplicando texturas do Minecraft...", 2)
+        runMinecraftTexturing()
+    end)
+
+    -- Botão 2: Texturas Reais Oficiais (Com Cadeado se for Free / Liberado se for Premium)
+    local RealTexBtn = Instance.new("TextButton", TexturaPanel)
+    RealTexBtn.Size = UDim2.fromOffset(496, 40)
+    RealTexBtn.Position = UDim2.fromOffset(12, 88)
+    RealTexBtn.BackgroundColor3 = Color3.fromRGB(20, 14, 10)
+    RealTexBtn.Text = ""
+    Instance.new("UICorner", RealTexBtn).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", RealTexBtn).Color = isPremium and COLORS.accent or Color3.fromRGB(100, 100, 100)
+
+    local lockText = isPremium and "🔓 " or "🔒 [PAGO / PREMIUM] "
+    local rtTitle = Instance.new("TextLabel", RealTexBtn)
+    rtTitle.Size = UDim2.new(1, -12, 0, 18)
+    rtTitle.Position = UDim2.fromOffset(10, 3)
+    rtTitle.BackgroundTransparency = 1
+    rtTitle.Text = lockText .. "Texturas Reais Avançadas (Grass, Stone, Brick, etc.)"
+    rtTitle.TextColor3 = isPremium and COLORS.accent or Color3.fromRGB(255, 100, 100)
+    rtTitle.Font = Enum.Font.GothamBold
+    rtTitle.TextSize = 11
+    rtTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local rtSub = Instance.new("TextLabel", RealTexBtn)
+    rtSub.Size = UDim2.new(1, -12, 0, 15)
+    rtSub.Position = UDim2.fromOffset(10, 20)
+    rtSub.BackgroundTransparency = 1
+    rtSub.Text = isPremium and "IDs reais de alta qualidade liberados!" : "Requer Versão Paga / Key Premium para desbloquear"
+    rtSub.TextColor3 = COLORS.dim
+    rtSub.Font = Enum.Font.Gotham
+    rtSub.TextSize = 9
+    rtSub.TextXAlignment = Enum.TextXAlignment.Left
+
+    RealTexBtn.MouseButton1Click:Connect(function()
+        if isPremium then
+            Notify("Texturas Reais", "Aplicando IDs oficiais no mapa...", 2)
+            runCustomTexturing()
+        else
+            Notify("Bloqueado 🔒", "Insira a Key Premium para usar esta textura avançada!", 3)
+        end
+    end)
+
+    -- SISTEMA DE TROCA DE ABAS
+    local function setActiveTab(activeBtn, targetFrame)
+        MainFrame.Visible = false
+        InfoFrame.Visible = false
+        TexturaFrame.Visible = false
+        
+        MainTabBtn.BackgroundColor3 = Color3.fromRGB(35, 24, 18)
+        InfoTabBtn.BackgroundColor3 = Color3.fromRGB(35, 24, 18)
+        TexturaTabBtn.BackgroundColor3 = Color3.fromRGB(35, 24, 18)
+        
+        MainTabBtn.TextColor3 = COLORS.text
+        InfoTabBtn.TextColor3 = COLORS.text
+        TexturaTabBtn.TextColor3 = COLORS.text
+
+        targetFrame.Visible = true
+        activeBtn.BackgroundColor3 = COLORS.accent
+        activeBtn.TextColor3 = Color3.fromRGB(20, 12, 8)
+    end
+
+    MainTabBtn.MouseButton1Click:Connect(function() setActiveTab(MainTabBtn, MainFrame) end)
+    InfoTabBtn.MouseButton1Click:Connect(function() setActiveTab(InfoTabBtn, InfoFrame) end)
+    TexturaTabBtn.MouseButton1Click:Connect(function() setActiveTab(TexturaTabBtn, TexturaFrame) end)
+
+    setActiveTab(MainTabBtn, MainFrame)
+
+    Notify("SUS HUB v.11.0", "Painel carregado com sucesso!", 3)
+end
+
+-- =====================================================================
+-- TELA DE KEY (LOOTLABS E LINKVERTISE)
+-- =====================================================================
+local function ShowKeySystem()
+    local SG = Instance.new("ScreenGui")
+    SG.Name = "SUS_KeySystem"
+    SG.ZIndexBehavior = Enum.ZIndexBehavior.Global
+    SG.ResetOnSpawn = false
+    SG.IgnoreGuiInset = true
+    Protect(SG)
+
+    local Backdrop = Instance.new("Frame", SG)
+    Backdrop.Size = UDim2.fromScale(1, 1)
+    Backdrop.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Backdrop.BackgroundTransparency = 0.5
+
+    local Card = Instance.new("Frame", Backdrop)
+    Card.Size = UDim2.fromOffset(500, 330)
+    Card.AnchorPoint = Vector2.new(0.5, 0.5)
+    Card.Position = UDim2.fromScale(0.5, 0.5)
+    Card.BackgroundColor3 = Color3.fromRGB(20, 14, 10)
+    Instance.new("UICorner", Card).CornerRadius = UDim.new(0, 12)
+
+    local Stroke = Instance.new("UIStroke", Card)
+    Stroke.Color = Color3.fromRGB(255, 140, 0)
+    Stroke.Thickness = 1.5
+
+    local TopHeader = Instance.new("Frame", Card)
+    TopHeader.Size = UDim2.new(1, 0, 0, 40)
+    TopHeader.BackgroundTransparency = 1
+
+    local Title = Instance.new("TextLabel", TopHeader)
+    Title.Size = UDim2.new(1, -120, 1, 0)
+    Title.Position = UDim2.fromOffset(15, 0)
+    Title.BackgroundTransparency = 1
+    Title.Text = "🔒 SUS HUB — Key System"
+    Title.TextColor3 = Color3.fromRGB(255, 160, 60)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 13
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+
+    local FreemiumBadge = Instance.new("TextButton", TopHeader)
+    FreemiumBadge.Size = UDim2.fromOffset(85, 24)
+    FreemiumBadge.Position = UDim2.new(1, -115, 0.5, -12)
+    FreemiumBadge.BackgroundColor3 = Color3.fromRGB(20, 80, 40)
+    FreemiumBadge.Text = "Freemium"
+    FreemiumBadge.TextColor3 = Color3.fromRGB(0, 255, 100)
+    FreemiumBadge.Font = Enum.Font.GothamBold
+    FreemiumBadge.TextSize = 11
+    Instance.new("UICorner", FreemiumBadge).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", FreemiumBadge).Color = Color3.fromRGB(0, 255, 100)
+
+    local CloseKeyBtn = Instance.new("TextButton", TopHeader)
+    CloseKeyBtn.Size = UDim2.fromOffset(24, 24)
+    CloseKeyBtn.Position = UDim2.new(1, -28, 0.5, -12)
+    CloseKeyBtn.BackgroundTransparency = 1
+    CloseKeyBtn.Text = "✕"
+    CloseKeyBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+    CloseKeyBtn.Font = Enum.Font.GothamBold
+    CloseKeyBtn.TextSize = 14
+    CloseKeyBtn.MouseButton1Click:Connect(function() SG:Destroy() end)
+
+    local LeftBox = Instance.new("Frame", Card)
+    LeftBox.Size = UDim2.fromOffset(210, 260)
+    LeftBox.Position = UDim2.fromOffset(15, 50)
+    LeftBox.BackgroundColor3 = Color3.fromRGB(30, 22, 16)
+    Instance.new("UICorner", LeftBox).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", LeftBox).Color = Color3.fromRGB(255, 140, 0)
+
+    local InfoLabel = Instance.new("TextLabel", LeftBox)
+    InfoLabel.Size = UDim2.new(1, -16, 0, 55)
+    InfoLabel.Position = UDim2.fromOffset(8, 8)
+    InfoLabel.BackgroundTransparency = 1
+    InfoLabel.Text = "Information\nCreator: LCK SCRIPT\nVersion: v.11.0"
+    InfoLabel.TextColor3 = Color3.fromRGB(240, 220, 200)
+    InfoLabel.Font = Enum.Font.Gotham
+    InfoLabel.TextSize = 11
+    InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    local Divider = Instance.new("Frame", LeftBox)
+    Divider.Size = UDim2.new(1, -16, 0, 1)
+    Divider.Position = UDim2.fromOffset(8, 70)
+    Divider.BackgroundColor3 = Color3.fromRGB(80, 55, 40)
+    Divider.BorderSizePixel = 0
+
+    local UserProfileTitle = Instance.new("TextLabel", LeftBox)
+    UserProfileTitle.Size = UDim2.new(1, -16, 0, 20)
+    UserProfileTitle.Position = UDim2.fromOffset(8, 78)
+    UserProfileTitle.BackgroundTransparency = 1
+    UserProfileTitle.Text = "User Profile"
+    UserProfileTitle.TextColor3 = Color3.fromRGB(255, 160, 60)
+    UserProfileTitle.Font = Enum.Font.GothamBold
+    UserProfileTitle.TextSize = 11
+    UserProfileTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local AvatarImg = Instance.new("ImageLabel", LeftBox)
+    AvatarImg.Size = UDim2.fromOffset(45, 45)
+    AvatarImg.Position = UDim2.new(0.5, -22, 0, 102)
+    AvatarImg.BackgroundColor3 = Color3.fromRGB(45, 32, 25)
+    AvatarImg.Image = "rbxassetid://7072718330"
+    Instance.new("UICorner", AvatarImg).CornerRadius = UDim.new(1, 0)
+
+    local PlayerNameTag = Instance.new("TextLabel", LeftBox)
+    PlayerNameTag.Size = UDim2.new(1, -10, 0, 35)
+    PlayerNameTag.Position = UDim2.fromOffset(5, 152)
+    PlayerNameTag.BackgroundTransparency = 1
+    PlayerNameTag.Text = LocalPlayer.Name .. "\n@" .. LocalPlayer.Name
+    PlayerNameTag.TextColor3 = Color3.fromRGB(240, 230, 220)
+    PlayerNameTag.Font = Enum.Font.GothamBold
+    PlayerNameTag.TextSize = 11
+    PlayerNameTag.TextXAlignment = Enum.TextXAlignment.Center
+
+    local RightBox = Instance.new("Frame", Card)
+    RightBox.Size = UDim2.fromOffset(245, 260)
+    RightBox.Position = UDim2.fromOffset(238, 50)
+    RightBox.BackgroundColor3 = Color3.fromRGB(30, 22, 16)
+    Instance.new("UICorner", RightBox).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", RightBox).Color = Color3.fromRGB(255, 140, 0)
+
+    local NoticeBox = Instance.new("Frame", RightBox)
+    NoticeBox.Size = UDim2.new(1, -16, 0, 50)
+    NoticeBox.Position = UDim2.fromOffset(8, 8)
+    NoticeBox.BackgroundColor3 = Color3.fromRGB(40, 30, 22)
+    Instance.new("UICorner", NoticeBox).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", NoticeBox).Color = Color3.fromRGB(0, 255, 100)
+
+    local NoticeTxt = Instance.new("TextLabel", NoticeBox)
+    NoticeTxt.Size = UDim2.new(1, -12, 1, 0)
+    NoticeTxt.Position = UDim2.fromOffset(6, 0)
+    NoticeTxt.BackgroundTransparency = 1
+    NoticeTxt.Text = "Freemium — key is optional.\nEnter a key to unlock premium features."
+    NoticeTxt.TextColor3 = Color3.fromRGB(180, 220, 190)
+    NoticeTxt.Font = Enum.Font.Gotham
+    NoticeTxt.TextSize = 10
+    NoticeTxt.TextWrapped = true
+    NoticeTxt.TextXAlignment = Enum.TextXAlignment.Left
+
+    local StatusLbl = Instance.new("TextLabel", RightBox)
+    StatusLbl.Size = UDim2.new(1, -16, 0, 32)
+    StatusLbl.Position = UDim2.fromOffset(8, 68)
+    StatusLbl.BackgroundColor3 = Color3.fromRGB(40, 30, 22)
+    StatusLbl.Text = "🔓 Ready for Authentication"
+    StatusLbl.TextColor3 = Color3.fromRGB(255, 180, 0)
+    StatusLbl.Font = Enum.Font.GothamBold
+    StatusLbl.TextSize = 10
+    Instance.new("UICorner", StatusLbl).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", StatusLbl).Color = Color3.fromRGB(255, 140, 0)
+
+    local KeyInputBg = Instance.new("Frame", RightBox)
+    KeyInputBg.Size = UDim2.new(1, -16, 0, 35)
+    KeyInputBg.Position = UDim2.fromOffset(8, 110)
+    KeyInputBg.BackgroundColor3 = Color3.fromRGB(15, 10, 8)
+    Instance.new("UICorner", KeyInputBg).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", KeyInputBg).Color = Color3.fromRGB(255, 140, 0)
+
+    local KeyInput = Instance.new("TextBox", KeyInputBg)
+    KeyInput.Size = UDim2.new(1, -10, 1, 0)
+    KeyInput.Position = UDim2.fromOffset(5, 0)
+    KeyInput.BackgroundTransparency = 1
+    KeyInput.PlaceholderText = "Enter premium key..."
+    KeyInput.Text = ""
+    KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    KeyInput.PlaceholderColor3 = Color3.fromRGB(140, 110, 90)
+    KeyInput.Font = Enum.Font.GothamMedium
+    KeyInput.TextSize = 11
+    KeyInput.ClearTextOnFocus = false
+
+    local HWIDLbl = Instance.new("TextLabel", RightBox)
+    HWIDLbl.Size = UDim2.new(1, 0, 0, 15)
+    HWIDLbl.Position = UDim2.fromOffset(0, 153)
+    HWIDLbl.BackgroundTransparency = 1
+    HWIDLbl.Text = "HWID: " .. GetHWID():sub(1, 14) .. "..."
+    HWIDLbl.TextColor3 = Color3.fromRGB(200, 170, 150)
+    HWIDLbl.Font = Enum.Font.Gotham
+    HWIDLbl.TextSize = 9
+    HWIDLbl.TextXAlignment = Enum.TextXAlignment.Center
+
+    local BtnY = 175
+    local BtnH = 34
+    local BtnW = 75
+    local Gap = 4
+
+    local FreeVersionBtn = Instance.new("TextButton", RightBox)
+    FreeVersionBtn.Size = UDim2.fromOffset(BtnW, BtnH)
+    FreeVersionBtn.Position = UDim2.fromOffset(8, BtnY)
+    FreeVersionBtn.BackgroundColor3 = Color3.fromRGB(55, 40, 30)
+    FreeVersionBtn.Text = "Free Version"
+    FreeVersionBtn.TextColor3 = Color3.fromRGB(240, 220, 200)
+    FreeVersionBtn.Font = Enum.Font.GothamBold
+    FreeVersionBtn.TextSize = 10
+    Instance.new("UICorner", FreeVersionBtn).CornerRadius = UDim.new(0, 6)
+
+    local GetKeyBtn = Instance.new("TextButton", RightBox)
+    GetKeyBtn.Size = UDim2.fromOffset(BtnW, BtnH)
+    GetKeyBtn.Position = UDim2.fromOffset(8 + BtnW + Gap, BtnY)
+    GetKeyBtn.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+    GetKeyBtn.Text = "Get Key"
+    GetKeyBtn.TextColor3 = Color3.fromRGB(20, 14, 10)
+    GetKeyBtn.Font = Enum.Font.GothamBold
+    GetKeyBtn.TextSize = 10
+    Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 6)
+
+    local EnterKeyBtn = Instance.new("TextButton", RightBox)
+    EnterKeyBtn.Size = UDim2.fromOffset(BtnW, BtnH)
+    EnterKeyBtn.Position = UDim2.fromOffset(8 + (BtnW + Gap) * 2, BtnY)
+    EnterKeyBtn.BackgroundColor3 = Color3.fromRGB(180, 90, 0)
+    EnterKeyBtn.Text = "Enter Key"
+    EnterKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    EnterKeyBtn.Font = Enum.Font.GothamBold
+    EnterKeyBtn.TextSize = 10
+    Instance.new("UICorner", EnterKeyBtn).CornerRadius = UDim.new(0, 6)
+
+    local panelOpen = false
+    local OptionPanel = Instance.new("Frame", RightBox)
+    OptionPanel.Size = UDim2.fromOffset(BtnW + 20, 58)
+    OptionPanel.Position = UDim2.fromOffset(8 + BtnW + Gap - 10, BtnY - 62)
+    OptionPanel.BackgroundColor3 = Color3.fromRGB(40, 30, 22)
+    OptionPanel.Visible = false
+    OptionPanel.ZIndex = 25
+    Instance.new("UICorner", OptionPanel).CornerRadius = UDim.new(0, 6)
+    Instance.new("UIStroke", OptionPanel).Color = Color3.fromRGB(255, 140, 0)
+
+    local function makeLinkOption(text, yPos, link)
+        local optBtn = Instance.new("TextButton", OptionPanel)
+        optBtn.Size = UDim2.new(1, -6, 0, 24)
+        optBtn.Position = UDim2.fromOffset(3, yPos)
+        optBtn.BackgroundColor3 = Color3.fromRGB(60, 42, 30)
+        optBtn.Text = text
+        optBtn.TextColor3 = Color3.fromRGB(255, 200, 150)
+        optBtn.Font = Enum.Font.GothamBold
+        optBtn.TextSize = 9
+        optBtn.ZIndex = 26
+        Instance.new("UICorner", optBtn).CornerRadius = UDim.new(0, 4)
+        optBtn.MouseButton1Click:Connect(function()
+            pcall(function() (setclipboard or toclipboard)(link) end)
+            StatusLbl.Text = "🔗 " .. text .. " copiado!"
+            StatusLbl.TextColor3 = Color3.fromRGB(105, 195, 255)
+            OptionPanel.Visible = false
+            panelOpen = false
+        end)
+    end
+
+    makeLinkOption("Option 1 (Lootlabs)", 3, API_CONFIG.KEY_LINKS.Lootlabs)
+    makeLinkOption("Option 2 (Linkvertise)", 30, API_CONFIG.KEY_LINKS.Linkvertise)
+
+    GetKeyBtn.MouseButton1Click:Connect(function()
+        panelOpen = not panelOpen
+        OptionPanel.Visible = panelOpen
+    end)
+
+    FreeVersionBtn.MouseButton1Click:Connect(function()
+        StatusLbl.Text = "🟢 Free Version Ativa!"
+        StatusLbl.TextColor3 = Color3.fromRGB(0, 255, 100)
+        task.wait(0.4)
+        SG:Destroy()
+        LaunchSUSHub(false)
+    end)
+
+    EnterKeyBtn.MouseButton1Click:Connect(function()
+        local entered = KeyInput.Text:gsub("%s+", "")
+        if entered == API_CONFIG.VALID_KEY then
+            StatusLbl.Text = "🟢 Key Válida! Premium..."
+            StatusLbl.TextColor3 = Color3.fromRGB(0, 255, 100)
+            task.wait(0.5)
+            SG:Destroy()
+            LaunchSUSHub(true)
+        else
+            StatusLbl.Text = "🔴 Key Inválida!"
+            StatusLbl.TextColor3 = Color3.fromRGB(255, 80, 80)
+        end
+    end)
+end
+
+-- Inicialização
+ShowKeySystem()
